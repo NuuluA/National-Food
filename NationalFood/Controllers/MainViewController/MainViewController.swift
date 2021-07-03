@@ -28,6 +28,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pageController.numberOfPages = slideMainView.mainViewModel.count
         
     }
     
@@ -53,6 +54,7 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return slideMainView.mainViewModel.count
     }
@@ -69,9 +71,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
     
+    //Сообщает делегату, что просмотр прокрутки закончился, замедляя движение прокрутки.
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let width = collectionView.frame.width
         currentPage = Int(scrollView.contentOffset.x / width)
