@@ -10,3 +10,4 @@ import Foundation
 struct CategoryModel {
     let id, name, image: String
 }
+

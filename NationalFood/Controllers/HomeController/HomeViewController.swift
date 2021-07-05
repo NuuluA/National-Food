@@ -11,7 +11,8 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var popularCollectionView: UICollectionView!
-    
+    @IBOutlet weak var specialsCollectionView: UICollectionView!
+
     var categories: [CategoryModel] = [
         .init(id: "id1", name: "Food1", image: "https://silkroadresearch.files.wordpress.com/2018/06/beshbarmak.jpg?w=825"),
         .init(id: "id1", name: "Food2", image: "https://silkroadresearch.files.wordpress.com/2018/06/beshbarmak.jpg?w=825"),
@@ -26,6 +27,11 @@ class HomeViewController: UIViewController {
         .init(id: "id1", name: "Shorpo", description: "From soups, the most popular one is Kyrgyz shorpo. Fat meat broth can be mixed with different vegetables and spices (the recipe changes from region to region) but the classy shorpo is a meat broth with pieces of lamb, carrots, potatoes and greens. Ashlyann-Fu is a specific cold soup prepared from noodles, starch and sour vegetable broth. It is served with small potato patty.", image: "https://cacdn.araratour.com/file_manager/images/Kyrgyzstan/Articles/National%20Cuisine/Kyrgyz%20Shorpo.jpg", calories: 236),
     ]
     
+    var specialDish: [PopularDish] = [
+        .init(id: "id1", name: "Manty", description: "Manty can be found in all cuisines of Central Asian countries. They are prepared almost in the same way. Kyrgyz manty is prepared of chopped lamb or beef. The stuffed dough is cooked on steam and served with vinegar as a seasoning. Another popular stuffed dough dish is samsa that is popular far beyond the region. Moreover, it is a popular street food in Kyrgyzstan. Small triangle dough is usually stuffed with chopped meat and baked in tandyr. Instead of meat potatoes and pumpkin is also used.", image: "https://i.pinimg.com/originals/b5/1b/14/b51b146af14a1c304cdc049f3cdeb495.jpg", calories: 55),
+        .init(id: "id1", name: "Shorpo", description: "From soups, the most popular one is Kyrgyz shorpo. Fat meat broth can be mixed with different vegetables and spices (the recipe changes from region to region) but the classy shorpo is a meat broth with pieces of lamb, carrots, potatoes and greens. Ashlyann-Fu is a specific cold soup prepared from noodles, starch and sour vegetable broth. It is served with small potato patty.", image: "https://cacdn.araratour.com/file_manager/images/Kyrgyzstan/Articles/National%20Cuisine/Kyrgyz%20Shorpo.jpg", calories: 236)
+    ]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +42,8 @@ class HomeViewController: UIViewController {
         categoryCollectionView.register(UINib(nibName: CategoryCollectionViewCell.identifier, bundle: nil), forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
         
         popularCollectionView.register(UINib(nibName: PopularCollectionViewCell.identifier, bundle: nil), forCellWithReuseIdentifier: PopularCollectionViewCell.identifier)
+        
+        specialsCollectionView.register(UINib(nibName: SpecialsDishCollectionViewCell.identifier, bundle: nil), forCellWithReuseIdentifier: SpecialsDishCollectionViewCell.identifier)
     }
    
 }
@@ -49,6 +57,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return categories.count
         case popularCollectionView:
             return popularDish.count
+        case specialsCollectionView:
+            return specialDish.count
         default: return 0
             
         }
@@ -67,10 +77,25 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopularCollectionViewCell.identifier, for: indexPath) as! PopularCollectionViewCell
             cell.setup(popularDish[indexPath.item])
             return cell
+            
+        case specialsCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpecialsDishCollectionViewCell.identifier, for: indexPath) as! SpecialsDishCollectionViewCell
+            cell.setup(dish: specialDish[indexPath.item])
+            return cell
         default: return UICollectionViewCell()
             
         }
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == categoryCollectionView {
+            
+        } else {
+            let controller = DishDetailViewController.instantiate()
+            controller.dish = collectionView == popularCollectionView ? popularDish[indexPath.item] : specialDish[indexPath.item]
+            navigationController?.pushViewController(controller, animated: true)
+        }
     }
 
 }
